@@ -150,7 +150,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Lab10.c">
+    <Compile Include="zumo.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="UARTLibrary.h">
