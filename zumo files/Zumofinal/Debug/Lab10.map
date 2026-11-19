@@ -9,9 +9,9 @@ Discarded input sections
 
  .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
  .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
- .text          0x00000000        0x0 Lab10.o
- .data          0x00000000        0x0 Lab10.o
- .bss           0x00000000        0x0 Lab10.o
+ .text          0x00000000        0x0 zumo.o
+ .data          0x00000000        0x0 zumo.o
+ .bss           0x00000000        0x0 zumo.o
  .text          0x00000000        0x0 UART0Library.o
  .data          0x00000000        0x0 UART0Library.o
  .bss           0x00000000        0x0 UART0Library.o
@@ -80,7 +80,7 @@ Linker script and memory map
 
 Address of section .data set to 0x800100
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
-LOAD Lab10.o
+LOAD zumo.o
 LOAD UART0Library.o
 START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51\libm.a
@@ -285,18 +285,18 @@ END GROUP
                 0x0000009e                . = ALIGN (0x2)
  *(.text.*)
  .text.UART0_Init
-                0x0000009e       0x16 Lab10.o
+                0x0000009e       0x16 zumo.o
                 0x0000009e                UART0_Init
  .text.UART0_SendChar
-                0x000000b4        0x8 Lab10.o
+                0x000000b4        0x8 zumo.o
                 0x000000b4                UART0_SendChar
  .text.Joystick_Init
-                0x000000bc        0xe Lab10.o
+                0x000000bc        0xe zumo.o
                 0x000000bc                Joystick_Init
  .text.ReadJoystick
-                0x000000ca       0x2e Lab10.o
+                0x000000ca       0x2e zumo.o
                 0x000000ca                ReadJoystick
- .text.main     0x000000f8       0x96 Lab10.o
+ .text.main     0x000000f8       0x96 zumo.o
                 0x000000f8                main
                 0x0000018e                . = ALIGN (0x2)
  *(.fini9)
@@ -392,7 +392,7 @@ END GROUP
 
 .comment        0x00000000       0x30
  *(.comment)
- .comment       0x00000000       0x30 Lab10.o
+ .comment       0x00000000       0x30 zumo.o
                                  0x31 (size before relaxing)
 
 .note.gnu.avr.deviceinfo
@@ -418,7 +418,7 @@ END GROUP
 .debug_aranges  0x00000000       0x40
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x40 Lab10.o
+                0x00000000       0x40 zumo.o
 
 .debug_pubnames
  *(.debug_pubnames)
@@ -426,31 +426,31 @@ END GROUP
 .debug_info     0x00000000      0xa3c
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x780 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
- .debug_info    0x00000780      0x2bc Lab10.o
+ .debug_info    0x00000780      0x2bc zumo.o
 
 .debug_abbrev   0x00000000      0x894
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x718 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
- .debug_abbrev  0x00000718      0x17c Lab10.o
+ .debug_abbrev  0x00000718      0x17c zumo.o
 
-.debug_line     0x00000000      0x41f
+.debug_line     0x00000000      0x41e
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x169 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
- .debug_line    0x00000169      0x2b6 Lab10.o
+ .debug_line    0x00000169      0x2b5 zumo.o
 
 .debug_frame    0x00000000       0x64
  *(.debug_frame)
- .debug_frame   0x00000000       0x64 Lab10.o
+ .debug_frame   0x00000000       0x64 zumo.o
 
-.debug_str      0x00000000      0x4cd
+.debug_str      0x00000000      0x4c7
  *(.debug_str)
  .debug_str     0x00000000      0x27d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega128a/avr51/crtatmega128a.o
- .debug_str     0x0000027d      0x250 Lab10.o
-                                0x289 (size before relaxing)
+ .debug_str     0x0000027d      0x24a zumo.o
+                                0x283 (size before relaxing)
 
 .debug_loc      0x00000000      0x1cb
  *(.debug_loc)
- .debug_loc     0x00000000      0x1cb Lab10.o
+ .debug_loc     0x00000000      0x1cb zumo.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -472,7 +472,7 @@ END GROUP
 
 .debug_ranges   0x00000000       0x30
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x30 Lab10.o
+ .debug_ranges  0x00000000       0x30 zumo.o
 
 .debug_macro
  *(.debug_macro)

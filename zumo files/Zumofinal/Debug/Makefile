@@ -37,7 +37,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../Lab10.c \
+../zumo.c \
 ../UART0Library.c
 
 
@@ -48,19 +48,19 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-Lab10.o \
+zumo.o \
 UART0Library.o
 
 OBJS_AS_ARGS +=  \
-Lab10.o \
+zumo.o \
 UART0Library.o
 
 C_DEPS +=  \
-Lab10.d \
+zumo.d \
 UART0Library.d
 
 C_DEPS_AS_ARGS +=  \
-Lab10.d \
+zumo.d \
 UART0Library.d
 
 OUTPUT_FILE_PATH +=Lab10.elf
@@ -77,7 +77,7 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-./Lab10.o: .././Lab10.c
+./zumo.o: .././zumo.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega128a -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega128a" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

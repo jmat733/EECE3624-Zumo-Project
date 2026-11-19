@@ -2,7 +2,7 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-Lab10.c
+zumo.c
 
 UART0Library.c
 
