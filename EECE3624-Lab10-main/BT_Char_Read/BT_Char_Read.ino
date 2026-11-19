@@ -1,46 +1,144 @@
-/*
-  Simple character read.  This is looking for an "H" or and "L"
-  and will set the LED tied to the given pin on or off.
 
-  "SoftwareSerial" is a library that does a bit-bang USART interface on 
-  any two digital GPIOs on an arduino.  This allows you to leave the 
-  primary USART for debugging.
-
-  This routine setups a USART on pins 2 and 4 named "bluetooth".  It then
-  setups up this uart at 9600 baud.  In the loop, it checks to see if a
-  character has arrived, and then reads it.
-
-  The LED13 (built in LED) is blinked to show the program is running.  This
-  blink can be moved inside the bluetooth if statement for debugging, or
-  the normal serial pipe can be used.
-*/
-
+#include <Wire.h>
+#include <ZumoShield.h>
 #include <SoftwareSerial.h>
 
-//receiver
-int led = 13; 
-unsigned char incomingByte;     
+// Existing working Bluetooth pins
+SoftwareSerial bluetooth(2, 4);
 
-// HC-05
-SoftwareSerial bluetooth(2,4);  // RX, TX
+ZumoMotors motors;
 
-void setup() {
-  Serial.begin(9600);
-  Serial.println("Serial setup complete.");
-  pinMode(led, OUTPUT);
-  // Setup the HC-05 bluetooth device
-  // (HC)=(Uno).  VCC=5V, GND=GND, TX=RX(pin2),
-  // RX=DNC! (possible damage if 5V Uno TX drives to HC-05)
-  bluetooth.begin(9600);
+// Motor settings
+const int NORMAL_SPEED = 300;
+const int NORMAL_TURN_SPEED = 180;
+
+const int FAST_SPEED = 400;
+const int FAST_TURN_SPEED = 300;
+
+// Bluetooth failsafe
+const unsigned long COMMAND_TIMEOUT = 400;
+
+unsigned long lastCommandTime = 0;
+
+char currentCommand = 'S';
+bool fastMode = false;
+
+// Apply motor movement
+void driveRobot()
+{
+    int speed;
+    int turnSpeed;
+
+    if (fastMode)
+    {
+        speed = FAST_SPEED;
+        turnSpeed = FAST_SPEED;
+    }
+    else
+    {
+        speed = NORMAL_SPEED;
+        turnSpeed = NORMAL_TURN_SPEED;
+    }
+
+    switch (currentCommand)
+    {
+        case 'F':
+            motors.setSpeeds(speed, speed);
+            break;
+
+        case 'B':
+            motors.setSpeeds(-speed, -speed);
+            break;
+
+        case 'L':
+            motors.setSpeeds(-turnSpeed, turnSpeed);
+            break;
+
+        case 'R':
+            motors.setSpeeds(turnSpeed, -turnSpeed);
+            break;
+
+        case 'S':
+        default:
+            motors.setSpeeds(0, 0);
+            break;
+    }
 }
 
-void loop() {
-  digitalWrite(led,HIGH);
-  delay(1000);
-  digitalWrite(led,LOW);
-  delay(1000);
-  if (bluetooth.available()) {  
-    incomingByte = (unsigned char) bluetooth.read();
-    Serial.write(incomingByte);
-  }
+void setup()
+{
+    Serial.begin(9600);
+    bluetooth.begin(9600);
+
+    // Start safely
+    currentCommand = 'S';
+    fastMode = false;
+
+    motors.setSpeeds(0, 0);
+
+    lastCommandTime = millis();
+
+    Serial.println("ZumoBot Ready");
+    Serial.println("Normal Mode Active");
+}
+
+void loop()
+{
+    while (bluetooth.available() > 0)
+    {
+        char received = bluetooth.read();
+
+        // Fast mode ON
+        if (received == 'T')
+        {
+            fastMode = true;
+            lastCommandTime = millis();
+
+            Serial.println("FAST MODE ON");
+            driveRobot();
+        }
+
+        // Fast mode OFF
+        else if (received == 'N')
+        {
+            fastMode = false;
+            lastCommandTime = millis();
+
+            Serial.println("NORMAL MODE ON");
+            driveRobot();
+        }
+
+        // Joystick movement
+        else if (received == 'F' ||
+                 received == 'B' ||
+                 received == 'L' ||
+                 received == 'R' ||
+                 received == 'S')
+        {
+            lastCommandTime = millis();
+
+            if (received != currentCommand)
+            {
+                currentCommand = received;
+
+                Serial.print("Command: ");
+                Serial.println(currentCommand);
+
+                driveRobot();
+            }
+        }
+    }
+
+    // Stop if Bluetooth messages disappear
+    if (millis() - lastCommandTime >
+        COMMAND_TIMEOUT)
+    {
+        if (currentCommand != 'S')
+        {
+            currentCommand = 'S';
+            driveRobot();
+
+            Serial.println("Bluetooth Lost - STOP");
+        }
+    }
 }
